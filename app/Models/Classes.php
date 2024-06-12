@@ -15,4 +15,9 @@ class Classes extends Model
     {
         return $this->belongsToMany(User::class, 'user_class', 'class_id', 'user_id')->withTimestamps();
     }
+
+    public function attachments()
+    {
+        return $this->hasMany(Attachments::class, 'class_id', 'id');
+    }
 }

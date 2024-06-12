@@ -17,9 +17,7 @@ class CreateClassesTable extends Migration
             $table->string('id')->primary();
             $table->string('name');
             $table->string('description')->nullable();
-            $table->string('tingkatan');
-            $table->unsignedBigInteger('durasi');
-            $table->unsignedBigInteger('total');
+            $table->integer('duration');
             $table->timestamps();
         });
     }

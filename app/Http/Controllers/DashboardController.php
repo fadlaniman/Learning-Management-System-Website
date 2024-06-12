@@ -8,7 +8,11 @@ use App\Models\User;
 
 class DashboardController extends Controller
 {
-    public function index() {
-        return view('/admin/dashboard', ['students' => User::where('role', 'student')->get(), 'studies' => Classes::all(), 'teachers' => User::where('role', 'teacher')->get()]);
+    public function index()
+    {
+        return view(
+            '/admin/dashboard',
+            ['students' => User::where('level', '3')->get(), 'studies' => Classes::all(), 'teachers' => User::where('level', '2')->get()]
+        );
     }
 }

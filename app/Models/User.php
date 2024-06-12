@@ -49,4 +49,14 @@ class User extends Authenticatable
         return $this->belongsToMany(Classes::class, 'user_class', 'user_id', 'class_id')->withTimestamps();
     }
 
+    public function attachments()
+    {
+        return $this->hasMany(Attachments::class, 'user_id', 'uid');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comments::class, 'attachment_id', 'uid');
+    }
+
 }

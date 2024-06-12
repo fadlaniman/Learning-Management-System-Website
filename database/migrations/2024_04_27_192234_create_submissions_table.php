@@ -15,12 +15,14 @@ class CreateSubmissionsTable extends Migration
     {
         Schema::create('submissions', function (Blueprint $table) {
             $table->id();
-            $table->string('description')->nullable();
+            $table->string('description');
             $table->string('file');
-            $table->string('uid');
+            $table->string('user_id');
+            $table->string('class_id');
             $table->unsignedBigInteger('attachment_id');
             $table->timestamps();
-            $table->foreign('uid')->references('uid')->on('users');
+            $table->foreign('user_id')->references('uid')->on('users');
+            $table->foreign('class_id')->references('id')->on('class');
             $table->foreign('attachment_id')->references('id')->on('attachments');
         });
     }

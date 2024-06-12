@@ -1,6 +1,5 @@
 @extends('layout.index')
 @section('content')
-
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -11,8 +10,8 @@
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item active">Home</li>
-                        <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                        <li class="breadcrumb-item active"></li>
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -22,25 +21,29 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <!-- Small Box (Stat card) -->    
+            <!-- Small Box (Stat card) -->
             <div class="row">
-                @foreach ($users->classes as $class)
+                @foreach ($userclass as $class)
                 <div class="col-lg-3 col-6">
                     <!-- small card -->
-                    <div class="small-box bg-success">
+                    <div class="small-box bg-gradient-primary">
                         <div class="inner">
-                            <h4>{{$class->name}}</h4>
-
-                            <p>{{$class->description}}</p>
+                            <h4>{{$class->classes->name}}</h4>
+                            <p>{{$class->classes->description}}</p>
                         </div>
                         <div class="icon">
-                            <i class="fas fa-book"></i>
+                            <i class="fas fa-chalkboard-teacher"></i>
                         </div>
-                        <a href="{{url('/teacher/classes/attendance/' . $class->id)}}" class="small-box-footer">
-                            More info <i class="fas fa-arrow-circle-right"></i>
+                        <a href="{{url('/teacher/classes/' .$class->classes->id . '/detail')}}" class="small-box-footer">
+                            Open Class <i class="fas fa-arrow-circle-right"></i>
                         </a>
                     </div>
                 </div>
                 @endforeach
             </div>
-            @endsection
+
+        </div>
+    </section>
+    <!-- Main content -->
+</div>
+@endsection

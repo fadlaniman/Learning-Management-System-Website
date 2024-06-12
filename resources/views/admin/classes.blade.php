@@ -3,16 +3,20 @@
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <section class="content-header">
+    <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-sm-6">
-                </div>
-
-            </div>
+                <div class="col-sm-12">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active" aria-current="page"></li>
+                        <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                        <li class="breadcrumb-item"><a href="#">Classes</a></li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
         </div><!-- /.container-fluid -->
-    </section>
-
+    </div>
+    <!-- /.content-header -->
     <!-- Main content -->
     <section class="content">
         <!-- Default box -->
@@ -29,65 +33,65 @@
                 </div>
             </div>
             <div class="card-body p-0">
-                <table class="table table-striped projects">
+                <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th>
-                                ID
-                            </th>
-                            <th>
-                                Users
-                            </th>
-                            <th>
-                                Studies
-                            </th>
-                            <th>
-                                Created
-                            </th>
-                            <th>
-                                Update
-                            </th>
+                            <th>No</th>
+                            <th>Users</th>
+                            <th>Studies</th>
+                            <th>Created</th>
+                            <th>Updated</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($classes as $class)
+                        @foreach($classes as $index => $class)
                         <tr>
-                            <td>{{$class->id}}
-                            </td>
-                            <td>{{$class->user_id}}
-                            </td>
-                            <td>{{$class->class_id}}
-                            </td>
-                            <td>{{$class->created_at}}
-                            </td>
-                            <td>{{$class->updated_at}}
-                            </td>
-                
-                            <td class="project-actions text-right">
-                                <a class="btn btn-info btn-sm" href="#editUserModal{{$class->id}}" data-toggle="modal">
-                                    <i class="fas fa-pencil-alt">
-                                    </i>
-                                    Edit
-                                </a>
-                                <a class="btn btn-danger btn-sm" href="#deleteUserModal{{$class->id}}" data-toggle="modal">
-                                    <i class="fas fa-trash">
-                                    </i>
-                                    Delete
+                            <td>{{$index+=1}}</td>
+                            <td>{{$class->user_id}}</td>
+                            <td>{{$class->class_id}}</td>
+                            <td>{{$class->created_at}}</td>
+                            <td>{{$class->updated_at}}</td>
+                            <td class="project-actions">
+                                <a class="btn btn-sm btn-outline-danger" href="#deleteUserModal{{$class->id}}" data-toggle="modal" title="Delete">
+                                    <i class="fas fa-trash"></i> Delete
                                 </a>
                             </td>
                         </tr>
-        
-                        @endforeach()
+                        @endforeach
                     </tbody>
                 </table>
+
             </div>
             <!-- /.card-body -->
         </div>
         <!-- /.card -->
+        <div class="container-fluid mt-5">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end">
+                    <li class="page-item">
+                        <a class="page-link" href="{{$classes->previousPageUrl()}}">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                    @for ($count = 1; $count <= $classes->lastPage(); $count++)
+                        <li class="page-item {{$classes->currentPage()? 'active' : ''}}"><a class="page-link" href="#">{{$count}}</a></li>
+                        @endfor
+                        <li class="page-item">
+                            <a class="page-link" href="{{$classes->nextPageUrl()}}">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                </ul>
+            </nav>
+        </div>
 
     </section>
     <!-- /.content -->
 </div>
+@endsection
 
 <!-- Insert Modal HTML -->
 <div id="addUserModal" class="modal fade">
@@ -102,7 +106,8 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>User</label>
-                        <select name="uid"  class="form-control" required>
+                        <select name="uid" class="form-control" required>
+                            <option value="">Select User</option>
                             @foreach($users as $user)
                             <option value="{{$user->uid}}">{{$user->uid}}</option>
                             @endforeach
@@ -111,6 +116,7 @@
                     <div class="form-group">
                         <label>Studies</label>
                         <select name="class_id" class="form-control" required>
+                            <option value="">Select Class</option>
                             @foreach($studies as $study)
                             <option value="{{$study->id}}">{{$study->id}}</option>
                             @endforeach
@@ -136,7 +142,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>User</label>
-                        <select name="uid"  class="form-control" required>
+                        <select name="uid" class="form-control" required>
                             @foreach($users as $user)
                             <option value="{{$user->uid}}">{{$user->uid}}</option>
                             @endforeach
@@ -169,7 +175,7 @@
         <div class="modal-content">
             <form method="post" action="{{url('/admin/class/'. $class->id . '/delete')}}">
                 @csrf
-                <div class="modal-header">  
+                <div class="modal-header">
                     <h4 class="modal-title">Delete Data</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
@@ -187,4 +193,3 @@
 </div>
 @endforeach
 <!-- /.content-wrapper -->
-@endsection

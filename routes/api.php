@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\Auth\ClassesController;
-use App\Http\Controllers\Auth\ClassroomController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ClassController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,9 +23,21 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 Route::controller(AuthController::class)->group(function () {
-    Route::post('/login', 'login');
-    Route::post('/logout', 'logout');
-    Route::post('/register', 'register');
+    Route::post('/login', 'apiLogin');
+    Route::post('/logout', 'apiLogout')->middleware('auth:sanctum');
 });
 
 
+Route::controller(UsersController::class)->group(function () {
+    Route::get('/users', 'apiShow');
+    Route::post('/users', 'apiStore');
+    Route::post('/users/{id}/update', 'apiUpdate');
+    Route::post('/users/{id}/delete', 'apiDestroy');
+});
+
+Route::controller(ClassController::class)->group(function () {
+    Route::get('/classes', 'apiShow');
+    Route::post('/classes', 'apiStore');
+    Route::post('/classes/{id}/update', 'apiUpdate');
+    Route::post('/classes/{id}/delete', 'apiDestroy');
+});

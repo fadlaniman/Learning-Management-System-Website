@@ -14,30 +14,25 @@ use Illuminate\View\View;
 
 class UserClassController extends Controller
 {
-    public function get(): View
+    public function index(): View
     {
-        return view('/teacher/home', ['users' => User::with('classes')->find(Auth::user()->uid)]);
-    }
-    public function getByCode($id): View
-    {
-        return view('/teacher/classes/attendance', ['class' => Classes::find($id)]);
+        return view('/teacher/home', ['userclass' => Userclass::with(['users', 'classes'])->where('user_id', Auth::user()->uid)->get()]);
     }
 
     public function show(): View
     {
-        return view('/admin/classes', ['classes' => UserClass::paginate(15), 'users' => User::all(), 'studies' => Classes::all()]);
+        return view('/admin/classes', ['classes' => UserClass::with('users')->paginate(15), 'users' => User::all(), 'studies' => Classes::all()]);
     }
-    
+
 
     public function store(Request $request)
     {
-        try{
+        try {
             $table = User::find($request->uid);
             $table->classes()->attach($request->class_id);
             return redirect()->intended('/admin/classes');
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return redirect()->intended('/admin/classes');
-
         }
     }
 

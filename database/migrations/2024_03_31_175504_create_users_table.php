@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('email');
             $table->string('password');
             $table->string('phone')->nullable();
-            $table->string('role');
+            $table->enum('level', ['1', '2', '3']);
             $table->timestamps();
         });
     }
