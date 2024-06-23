@@ -3,12 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
@@ -17,22 +14,21 @@ class AuthController extends Controller
 
 {
     // API Section
+
     public function apilogin(Request $request)
     {
         try {
-            $request->validate([
-                'email' => ['required', 'email'],
-                'password' => ['required'],
-            ]);
-
-            $user = User::where('email', $request->email)->first();
-            if (!$user || !Hash::check($request->password, $user->password)) {
-                throw ValidationException::withMessages([
-                    'email' => ['The provided credentials are incorrect.'],
-                ])->status(422);
+            $credentials =
+                $request->validate([
+                    'email' => ['required', 'email'],
+                    'password' => ['required'],
+                ]);
+            if (Auth::attempt($credentials)) {
+                $token = $request->user()->createToken($request->email);
+                return response()->json(['data' => Auth::user(), 'message' => 'succes', 'token' => $token->plainTextToken], 200);
+            } else {
+                return response()->json(['message' => 'User not found'], 401);
             }
-            $token =  $user->createToken($request->email)->plainTextToken;
-            return response()->json(['data' => $user, 'message' => 'succes', 'token' => $token], 200);
         } catch (ValidationException $e) {
             return response()->json(['message' => $e->getMessage()], $e->status);
         }
@@ -40,11 +36,20 @@ class AuthController extends Controller
 
     public function apiLogout(Request $request)
     {
-        return response()->json([
-            'message' => 'Successfully logged out', 'user' => auth::user()
-        ]);
+        try {
+            $request->user()->currentAccessToken()->delete();
+            return response()->json([
+                'message' => 'succes'
+            ], 200);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => $e,
+            ], 401);
+        }
     }
 
+
+    // WEB Section
     public function show(): View
     {
         return view('/auth/login');

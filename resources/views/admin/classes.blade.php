@@ -37,7 +37,8 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Users</th>
+                            <th>UID</th>
+                            <th>Name</th>
                             <th>Studies</th>
                             <th>Created</th>
                             <th>Updated</th>
@@ -48,8 +49,9 @@
                         @foreach($classes as $index => $class)
                         <tr>
                             <td>{{$index+=1}}</td>
-                            <td>{{$class->user_id}}</td>
-                            <td>{{$class->class_id}}</td>
+                            <td>{{$class->users->uid}}</td>
+                            <td>{{$class->users->firstName}} {{$class->users->lastName}}</td>
+                            <td>{{$class->classes->id}} - {{$class->classes->name}}</td>
                             <td>{{$class->created_at}}</td>
                             <td>{{$class->updated_at}}</td>
                             <td class="project-actions">
@@ -97,7 +99,7 @@
 <div id="addUserModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="post" action="{{url('/admin/class')}}">
+            <form method="post" action="{{url('/admin/classes')}}">
                 @csrf
                 <div class="modal-header">
                     <h4 class="modal-title">Insert Data</h4>
@@ -109,7 +111,7 @@
                         <select name="uid" class="form-control" required>
                             <option value="">Select User</option>
                             @foreach($users as $user)
-                            <option value="{{$user->uid}}">{{$user->uid}}</option>
+                            <option value="{{$user->uid}}">{{$user->uid}} - {{$user->firstName}} {{$user->lastName}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -118,7 +120,7 @@
                         <select name="class_id" class="form-control" required>
                             <option value="">Select Class</option>
                             @foreach($studies as $study)
-                            <option value="{{$study->id}}">{{$study->id}}</option>
+                            <option value="{{$study->id}}">{{$study->id}} - {{$study->name}}</option>
                             @endforeach
                         </select>
                     </div>

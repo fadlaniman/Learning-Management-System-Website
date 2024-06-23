@@ -16,7 +16,7 @@ class Attachments extends Model
         return $this->belongsTo(User::class, 'user_id', 'uid');
     }
 
-    public function class()
+    public function classes()
     {
         return $this->belongsTo(Classes::class, 'class_id', 'id');
     }

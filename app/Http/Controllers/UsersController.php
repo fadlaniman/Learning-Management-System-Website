@@ -11,9 +11,32 @@ use Illuminate\Validation\ValidationException;
 class UsersController extends Controller
 {
     // API Section
+
+    
+    public function apiForgotPassword(User $user, Request $request)
+    {
+        try {
+            $table = $user->find($request->uid);
+            $table->password = Hash::make($request->password);
+            $table->save();
+            return response()->json(['message' => 'success'], 200);
+        } catch (ValidationException $e) {
+            return response()->json(['message' => $e->getMessage()], $e->status);
+        }
+    }
     public function apiShow(User $user)
     {
-        return response()->json($user->all());
+        try {
+
+            return response()->json(['message' => 'success', 'data' => $user->all()], 200);
+        } catch (ValidationException $e) {
+            return response()->json(['message' => 'fail'], $e->status);
+        }
+    }
+    public function apiShowById(User $user, $id)
+    {
+        $table = $user->find($id);
+        return response()->json(['message' => 'success', 'data' => $table], 200);
     }
 
 
@@ -28,23 +51,7 @@ class UsersController extends Controller
             $table->phone = $request->phone;
             $table->level = $request->level;
             $table->save();
-            return response()->json(['message' => 'success'], 200);
-        } catch (ValidationException $e) {
-            return response()->json(['message' => $e->getMessage()], $e->status);
-        }
-    }
-    public function apiUpdate(User $user, Request $request, $id)
-    {
-        try {
-            $table = $user->find($id);
-            $table->uid = $request->uid;
-            $table->firstName = $request->firstName;
-            $table->lastName = $request->lastName;
-            $table->email = $request->email;
-            $table->phone = $request->phone;
-            $table->level = $request->level;
-            $table->save();
-            return response()->json(['message' => 'success'], 200);
+            return response()->json(['message' => 'success'], 201);
         } catch (ValidationException $e) {
             return response()->json(['message' => $e->getMessage()], $e->status);
         }
@@ -53,9 +60,8 @@ class UsersController extends Controller
     public function apiDestroy(User $user, $id)
     {
         try {
-
             $user->find($id)->delete();
-            return response()->json(['message' => 'success']);
+            return response()->json(['message' => 'success', 200]);
         } catch (ValidationException $e) {
             return response()->json(['message' => $e->getMessage()], $e->status);
         }

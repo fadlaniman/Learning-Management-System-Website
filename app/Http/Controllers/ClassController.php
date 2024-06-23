@@ -11,9 +11,17 @@ use Illuminate\Http\Request;
 class ClassController extends Controller
 {
     // API Section
+
+
     public function apiShow(Classes $classes)
     {
         return response()->json($classes->all());
+    }
+
+    public function apiShowById(Classes $classes, $id)
+    {
+        $table = $classes->find($id);
+        return response()->json(['message' => 'success', 'data' => $table], 200);
     }
 
     public function apiStore(Classes $table, Request $request)
@@ -24,7 +32,7 @@ class ClassController extends Controller
             $table->description = $request->description;
             $table->duration = $request->duration;
             $table->save();
-            return response()->json('success');
+            return response()->json('success', 201);
         } catch (Exception $e) {
             return response()->json($e);
         }

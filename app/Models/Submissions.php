@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UserAttendance extends Model
+class Submissions extends Model
 {
     use HasFactory;
 
@@ -13,9 +13,5 @@ class UserAttendance extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'uid');
     }
-
-    public function attendances()
-    {
-        return $this->belongsTo(Attendances::class, 'attendance_id', 'id');
-    }
 }
+    

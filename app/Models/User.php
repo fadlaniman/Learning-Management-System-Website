@@ -22,8 +22,8 @@ class User extends Authenticatable
      */
 
 
-     protected $fillable = [
-         'email', 'password', 'role'
+    protected $fillable = [
+        'email', 'password', 'role'
     ];
 
     /**
@@ -58,5 +58,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(Comments::class, 'attachment_id', 'uid');
     }
-
 }
